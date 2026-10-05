@@ -1,0 +1,19 @@
+# Scratch Postgres for the harness. Data lives in tmpfs and is gone on restart.
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: mend
+      POSTGRES_PASSWORD: mend
+    # wal_level=logical is for M1 (logical decoding). fsync=off only because
+    # this database is disposable; never copy it to anything real.
+    command: ["postgres", "-c", "wal_level=logical", "-c", "fsync=off"]
+    ports:
+      - "55432:5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "mend"]
+      interval: 1s
+      timeout: 3s
+      retries: 30

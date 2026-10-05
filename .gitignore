@@ -1,0 +1,6 @@
+# Private working notes (design docs, plans) and copyrighted papers.
+notes/
+research/
+
+# Harness output; regenerate with `just harness`.
+results/
